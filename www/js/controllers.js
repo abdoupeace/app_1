@@ -66,6 +66,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('HomeCtrl', function($scope) {
+  navigator.vibrate(1000);
   //todo get the evants with ajax
   $scope.evants = 
     [
@@ -92,7 +93,7 @@ angular.module('starter.controllers', [])
 })
 
 .controller('GetgiftCtrl', function($scope) {
-
+  navigator.vibrate(1000);
   $scope.content = 'some text for the about us';
 })
 
