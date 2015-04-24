@@ -31,17 +31,23 @@
     </head>
     <body>
        
+        <a href="#" onclick="window.close()">close</a>
 
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
+        document.addEventListener("deviceready", onDeviceReady, false);
 
-            var ref = window.open('http://imabdou.koding.io/login/login.php', '_self', 'location=yes');
-            ref.addEventListener('loadstop', function() {
-                setTimeout(function () {
-                    ref.close();
-                }, 2000);
-            });
+        // device APIs are available
+        //
+        function onDeviceReady() {
+             var ref = window.open('http://imabdou.koding.io/login/login.php', '_blank', 'location=yes');
+             ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
+             ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
+             ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+             ref.addEventListener('exit', function(event) { alert(event.type); });
+        }
+
         </script>
 
     </body>
