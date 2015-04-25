@@ -95,7 +95,7 @@ angular.module('sociogram.controllers', [])
 
         function loadFeed() {
             $scope.show();
-            OpenFB.get('/' + $stateParams.personId + '/home', {limit: 30})
+            OpenFB.get('/' + $stateParams.personId + '/home', {limit: 10})
                 .success(function (result) {
                     $scope.hide();
                     $scope.items = result.data;
