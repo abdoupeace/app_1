@@ -3,7 +3,7 @@ angular.module('sociogram', ['ionic', 'openfb', 'sociogram.controllers'])
     .run(function ($rootScope, $state, $ionicPlatform, $window, OpenFB) {
 
         //on prod remove url  ,'http://localhost:8100/oauthcallback.html' 
-        OpenFB.init('915757828489400');
+        OpenFB.init('915757828489400' );
 
         $ionicPlatform.ready(function () {
             if (window.StatusBar) {
@@ -64,12 +64,12 @@ angular.module('sociogram', ['ionic', 'openfb', 'sociogram.controllers'])
                 }
             })
 
-            .state('app.share', {
-                url: "/share",
+            .state('app.not', {
+                url: "/not",
                 views: {
                     'menuContent': {
-                        templateUrl: "templates/share.html",
-                        controller: "ShareCtrl"
+                        templateUrl: "templates/not.html",
+                        controller: "NotCtrl"
                     }
                 }
             })

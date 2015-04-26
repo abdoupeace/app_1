@@ -4,5 +4,11 @@
             "type": "registry",
             "id": "org.apache.cordova.inappbrowser"
         }
+    },
+    "de.appplant.cordova.plugin.local-notification": {
+        "source": {
+            "type": "registry",
+            "id": "de.appplant.cordova.plugin.local-notification"
+        }
     }
 }
