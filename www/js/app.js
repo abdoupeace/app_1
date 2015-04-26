@@ -1,10 +1,10 @@
 angular.module('sociogram', ['ionic', 'ngCordova', 'openfb', 'sociogram.controllers'])
 
-    .run(function ($rootScope, $state, $ionicPlatform, $timeout ,$window, OpenFB) {
+    .run(function ($rootScope, $state, $ionicPlatform ,$window, OpenFB) {
 
         //on prod remove url  ,'http://localhost:8100/oauthcallback.html' 
         OpenFB.init('915757828489400' );
-
+ 
         $ionicPlatform.ready(function () {
             if (window.StatusBar) {
                 StatusBar.styleDefault();
