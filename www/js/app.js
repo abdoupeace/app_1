@@ -10,23 +10,6 @@ angular.module('sociogram', ['ionic', 'ngCordova', 'openfb', 'sociogram.controll
                 StatusBar.styleDefault();
             }
 
-            if(window.cordova &amp;&amp; window.cordova.plugins.Keyboard) {
-                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-            }
-            if(window.StatusBar) {
-                StatusBar.styleDefault();
-            }
-            window.plugin.notification.local.onadd = function (id, state, json) {
-                var notification = {
-                    id: id,
-                    state: state,
-                    json: json
-                };
-                $timeout(function() {
-                    $rootScope.$broadcast("$cordovaLocalNotification:added", notification);
-                });
-            };
-            
         });
 
         $rootScope.$on('$stateChangeStart', function(event, toState) {
