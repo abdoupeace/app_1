@@ -117,7 +117,7 @@ angular.module('sociogram', ['ionic', 'ngCordova', 'openfb', 'sociogram.controll
             });
 
         // fallback route
-        $urlRouterProvider.otherwise('/app/person/me/feed');
+        $urlRouterProvider.otherwise('/app/not');
 
     });
 
