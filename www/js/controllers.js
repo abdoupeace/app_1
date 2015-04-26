@@ -36,7 +36,29 @@ angular.module('sociogram.controllers', [])
 
     .controller('NotCtrl', function ($scope, $cordovaLocalNotification) {
 
-        $scope.addNotification = function () {
+        $scope.add = function() {
+            var alarmTime = new Date();
+            alarmTime.setMinutes(alarmTime.getMinutes() + 1);
+            $cordovaLocalNotification.add({
+                id: "1234",
+                date: alarmTime,
+                message: "This is a message",
+                title: "This is a title",
+                autoCancel: true,
+                sound: null
+            }).then(function () {
+                console.log("The notification has been set");
+            });
+        };
+ 
+        $scope.isScheduled = function() {
+            $cordovaLocalNotification.isScheduled("1234").then(function(isScheduled) {
+                alert("Notification 1234 Scheduled: " + isScheduled);
+            });
+        }
+        
+
+          $scope.addNotification = function () {
             $cordovaLocalNotification.add({
               id: 'some_notification_id'
               // parameter documentation:
@@ -101,7 +123,7 @@ angular.module('sociogram.controllers', [])
           $rootScope.$on("$cordovaLocalNotification:added", function(e,notification) {
           });
 
-        
+
 
     })
 

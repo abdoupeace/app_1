@@ -2,33 +2,35 @@
     <ion-content has-header="true" padding="true">
     <br>
     <br>
+        <ion-content ng-controller="NotController">
 
-        <button class="button button-block button-positive" ng-click="checkIfIsScheduled()">
-            checkIfIsScheduled
-        </button>
+            <button class="button" ng-click="add()">Add notification</button>
+            <button class="button" ng-click="isScheduled()">Is Scheduled</button>
 
-        <button class="button button-block button-positive" ng-click="getNotificationIds()">
-            getNotificationIds
-        </button>
+            <button class="button button-block button-positive" ng-click="checkIfIsScheduled()">
+                checkIfIsScheduled
+            </button>
 
-        <button class="button button-block button-positive" ng-click="checkIfIsTriggered()">
-            checkIfIsTriggered
-        </button>
+            <button class="button button-block button-positive" ng-click="getNotificationIds()">
+                getNotificationIds
+            </button>
 
-        <button class="button button-block button-positive" ng-click="getTriggeredIds()">
-            getTriggeredIds
-        </button>
+            <button class="button button-block button-positive" ng-click="checkIfIsTriggered()">
+                checkIfIsTriggered
+            </button>
 
-        <button class="button button-block button-positive" ng-click="notificationDefaults()">
-            notificationDefaults
-        </button>
+            <button class="button button-block button-positive" ng-click="getTriggeredIds()">
+                getTriggeredIds
+            </button>
 
-        <button class="button button-block button-positive" ng-click="setDefaultOptions()">
-            setDefaultOptions
-        </button>
+            <button class="button button-block button-positive" ng-click="notificationDefaults()">
+                notificationDefaults
+            </button>
 
+            <button class="button button-block button-positive" ng-click="setDefaultOptions()">
+                setDefaultOptions
+            </button>
 
-
-    </ion-content>
+        </ion-content>
 
 </ion-view>

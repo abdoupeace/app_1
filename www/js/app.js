@@ -1,7 +1,25 @@
-angular.module('sociogram', ['ionic', 'openfb', 'sociogram.controllers'])
+angular.module('sociogram', ['ionic', 'ngCordova', 'openfb', 'sociogram.controllers'])
 
-    .run(function ($rootScope, $state, $ionicPlatform, $window, OpenFB) {
+    .run(function ($rootScope, $state, $ionicPlatform, $timeout ,$window, OpenFB) {
 
+        $ionicPlatform.ready(function() {
+            if(window.cordova &amp;&amp; window.cordova.plugins.Keyboard) {
+                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            }
+            if(window.StatusBar) {
+                StatusBar.styleDefault();
+            }
+            window.plugin.notification.local.onadd = function (id, state, json) {
+                var notification = {
+                    id: id,
+                    state: state,
+                    json: json
+                };
+                $timeout(function() {
+                    $rootScope.$broadcast("$cordovaLocalNotification:added", notification);
+                });
+            };
+        });
         //on prod remove url  ,'http://localhost:8100/oauthcallback.html' 
         OpenFB.init('915757828489400' );
 
@@ -21,6 +39,7 @@ angular.module('sociogram', ['ionic', 'openfb', 'sociogram.controllers'])
         $rootScope.$on('OAuthException', function() {
             $state.go('app.login');
         });
+        
 
     })
 
