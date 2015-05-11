@@ -1,192 +1,212 @@
-angular.module('sociogram.controllers', [])
+angular.module('starter.controllers', [])
 
-    .controller('AppCtrl', function ($scope, $state, OpenFB) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+  // Form data for the login modal
+  $scope.loginData = {};
 
-        $scope.logout = function () {
-            OpenFB.logout();
-            $state.go('app.login');
-        };
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/login.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
 
-        $scope.revokePermissions = function () {
-            OpenFB.revokePermissions().then(
-                function () {
-                    $state.go('app.login');
-                },
-                function () {
-                    alert('Revoke permissions failed');
-                });
-        };
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };
 
-    })
+  // Open the login modal
+  $scope.login = function() {
+    $scope.modal.show();
+  };
 
-    .controller('LoginCtrl', function ($scope, $location, OpenFB) {
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function() {
+    console.log('Doing login', $scope.loginData);
+
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $timeout(function() {
+      $scope.closeLogin();
+    }, 1000);
+  };
+})
+
+.controller('LoginCtrl', function ($scope, $location, OpenFB) {
 
         $scope.facebookLogin = function () {
 
-            OpenFB.login('email,read_stream,publish_stream,user_friends,user_birthday').then(
+            OpenFB.login('email,read_stream,publish_stream').then(
                 function () {
-                    $location.path('/app/person/me/feed');
+                    $location.path('/app/search');
                 },
                 function () {
                     alert('OpenFB login failed');
                 });
         };
 
+})   
+.controller('SearchCtrl',function($scope,$http, $window, $timeout,$location,$ionicLoading){
+
+        $scope.loading = $ionicLoading.show({
+            content: 'Loading ...'
+        });
+
+
+        var host = 'http://192.168.1.3/projects/zohir';
+        var action = '/gifts/SearchPage';
+        var params = [];
+
+
+        $scope.get = function(){
+            var url = '&&';
+            for(var k in params){
+                url = url + k + '=' + params[k] + '&';
+            }
+            //alert(url);
+            if(url == ''){
+                url = '&&';
+            }
+            $location.path("/app/giftlist/"+url);
+            //todo redirect to /getgiftlist/url+url
+
+        };
+        $scope.update = function(val,key) {
+            //console.log('key is : '+key);
+            //console.log('val is : '+val);
+
+            if(val == 'all'){
+                val = '';
+            }
+            params[key] = val;
+            //console.log(params);
+
+        };
+
+        var responsePromise = $http.post("http://192.168.1.3/projects/zohir/site/gifts/SearchPage");
+
+        responsePromise.success(function(data, status, headers, config) {
+            $scope.data = data;
+            $scope.loading.hide();
+
+        });
+        responsePromise.error(function(data, status, headers, config) {
+             $scope.loading.hide();
+            alert("AJAX failed!");
+            //console.log(data, status, headers, config);
+        });
+
+
+
+       
     })
 
-    .controller('NotCtrl', function ($scope, $cordovaLocalNotification) {
+.controller('GiftlistCtrl' , function($scope,$http,$location){
 
-        $scope.add = function() {
-            var alarmTime = new Date();
-            alarmTime.setMinutes(alarmTime.getMinutes() + 1);
-            $cordovaLocalNotification.add({
-                id: "1234",
-                date: alarmTime,
-                message: "This is a message",
-                title: "This is a title",
-                autoCancel: true,
-                sound: null
-            }).then(function () {
-                console.log("The notification has been set");
+        var siteurl = 'http://192.168.1.3/projects/zohir/site/search';
+        var url = $location.url();
+        url = url.split('&&')[1];
+
+        var curentpage = 1;
+        var nextpage = '';
+
+        function initScope(){
+
+            var responsePromise = $http.post( siteurl + '?' + url + '&page=' + curentpage );
+
+            responsePromise.success(function(data, status, headers, config) {
+                $scope.data = data.data;
+                $scope.current = curentpage;
+                $scope.role = true;
+                $scope.total = data.total;
+                nextpage = data.next;
+
             });
-        };
- 
-        $scope.isScheduled = function() {
-            $cordovaLocalNotification.isScheduled("1234").then(function(isScheduled) {
-                alert("Notification 1234 Scheduled: " + isScheduled);
+            responsePromise.error(function(data, status, headers, config) {
+                alert("AJAX failed!");
             });
         }
-        
-
-          $scope.addNotification = function () {
-            $cordovaLocalNotification.add({
-              id: 'some_notification_id'
-              // parameter documentation:
-              // https://github.com/katzer/cordova-plugin-local-notifications#further-informations-1
-            }).then(function () {
-              console.log('callback for adding background notification');
-            });
-          };
-
-          $scope.cancelNotification = function () {
-            $cordovaLocalNotification.cancel('some_notification_id').then(function () {
-              console.log('callback for cancellation background notification');
-            });
-          };
-
-          $scope.cancelAllNotification = function () {
-            $cordovaLocalNotification.cancelAll().then(function () {
-              console.log('callback for canceling all background notifications');
-            });
-          };
-
-          $scope.checkIfIsScheduled = function () {
-            $cordovaLocalNotification.isScheduled('some_notification_id').then(function (isScheduled) {
-              console.log(isScheduled);
-            });
-          };
-
-          $scope.getNotificationIds = function () {
-            $cordovaLocalNotification.getScheduledIds().then(function (scheduledIds) {
-              console.log(scheduledIds);
-            });
-          };
-
-          $scope.checkIfIsTriggered = function () {
-            $cordovaLocalNotification.isTriggered('some_notification_id').then(function (isTriggered) {
-              console.log(isTriggered);
-            });
-          };
-
-          $scope.getTriggeredIds = function () {
-            $cordovaLocalNotification.getTriggeredIds().then(function (triggeredIds) {
-              console.log(triggeredIds);
-            });
-          };
-
-          $scope.notificationDefaults = $cordovaLocalNotification.getDefaults();
-
-          $scope.setDefaultOptions = function () {
-            $cordovaLocalNotification.setDefaults({ autoCancel: true });
-          };
+        initScope();
 
 
-          $rootScope.$on("$cordovaLocalNotification:canceled", function(e,notification) {
-          });
-
-          $rootScope.$on("$cordovaLocalNotification:clicked", function(e,notification) {
-          });
-
-          $rootScope.$on("$cordovaLocalNotification:triggered", function(e,notification) {
-          });
-
-          $rootScope.$on("$cordovaLocalNotification:added", function(e,notification) {
-          });
+        $scope.next = function(){
+            if(nextpage != 'non'){
+                $scope.role = false;
+                curentpage ++ ;
+                initScope();
+            }
 
 
+        };
+
+        $scope.prev = function(){
+            if(curentpage > 1){
+                $scope.role = false;
+                curentpage -- ;
+                initScope();
+            }
+        };
+
+        $scope.$on('$routeChangeUpdate', initScope);
+        $scope.$on('$routeChangeSuccess', initScope);
 
     })
 
-    .controller('ProfileCtrl', function ($scope, OpenFB) {
-        OpenFB.get('/me').success(function (user) {
-            $scope.user = user;
-        });
-    })
-
-    .controller('PersonCtrl', function ($scope, $stateParams, OpenFB) {
-        OpenFB.get('/' + $stateParams.personId).success(function (user) {
-            $scope.user = user;
-        });
-    })
-
-    .controller('FriendsCtrl', function ($scope, $stateParams, OpenFB) {
-        OpenFB.get('/me/friends', {limit: 50})
-            .success(function (result) {
-                $scope.friends = result.data;
-            })
-            .error(function(data) {
-                alert("friendsctrl" + data.error.message);
-            });
-    })
-
-    .controller('MutualFriendsCtrl', function ($scope, $stateParams, OpenFB) {
-        OpenFB.get('/' + $stateParams.personId + '/mutualfriends', {limit: 50})
-            .success(function (result) {
-                $scope.friends = result.data;
-            })
-            .error(function(data) {
-                alert(data.error.message);
-            });
-    })
-
-    .controller('FeedCtrl', function ($scope, $stateParams, OpenFB, $ionicLoading) {
+.controller('GiftCtrl' ,function($scope , $http , $stateParams , $ionicLoading){
+        $scope.current = 1;
 
         $scope.show = function() {
-            $scope.loading = $ionicLoading.show({
-                content: 'Loading feed...'
+            $ionicLoading.show({
+                content: 'Loading ...',
             });
         };
         $scope.hide = function(){
-            $scope.loading.hide();
+            $ionicLoading.hide();
         };
+        $scope.next = function () {
+            if($scope.current < $scope.data.img_length){
+                $scope.current++;
+            }
+        };
+        $scope.prev = function () {
+            if($scope.current > 1){
+                $scope.current--;
+            }
+        };
+        
+        
+        var id = $stateParams.id;
+        var siteurl = "http://192.168.1.3/projects/zohir/site/gift/";
 
-        function loadFeed() {
+        function initScope(){
             $scope.show();
-            OpenFB.get('/' + $stateParams.personId + '/home', {limit: 10})
-                .success(function (result) {
-                    $scope.hide();
-                    $scope.items = result.data;
-                    // Used with pull-to-refresh
-                    $scope.$broadcast('scroll.refreshComplete');
-                })
-                .error(function(data) {
-                    $scope.hide();
-                    alert("FeedCtrl " + data.error.message);
-                });
+            var responsePromise = $http.post( siteurl + id );
+
+            responsePromise.success(function(data, status, headers, config) {
+                $scope.data = data;
+
+                console.log($scope.data);
+
+                $scope.url = "http://192.168.1.3/projects/zohir/site/img/";
+
+                $scope.hide();
+
+            });
+            responsePromise.error(function(data, status, headers, config) {
+                $scope.hide();
+                alert("AJAX failed!");
+            });
         }
+        initScope();
+        $scope.$on('$routeChangeUpdate', initScope);
+        $scope.$on('$routeChangeSuccess', initScope);
+        
 
-        $scope.doRefresh = loadFeed;
+    })
 
-        loadFeed();
 
-    });
+.controller('AboutCtrl' , function () {
+    
+})
+;

@@ -1,0 +1,70 @@
+<ion-view view-title="Gift : {{data.name}}">
+    <ion-content has-header="true" padding="true" >
+  		<div class="list card">
+
+		  <div class="item item-avatar">
+		    
+		    <h2>{{data.name}}</h2>
+		    <p>{{data.price}} DZD</p>
+		  </div>
+
+		  <div class="item item-body">
+		    <img class="full-image" ng-src="{{data.images[current]}}">
+		    <div class="item tabs tabs-secondary tabs-icon-left">
+			    <a class="tab-item" ng-click="prev()">
+            		<i class="icon ion-chevron-left"></i>
+			      Prev
+			    </a>
+			    <a class="tab-item" >
+			      {{current}} of {{data.img_length}}
+			    </a>
+			    <a class="tab-item" ng-click="next()">
+			      Next
+            		<i class="icon ion-chevron-right"></i>
+			    </a>
+			 </div>
+		    <h3>Description :</h3>
+		    <p>{{data.description}}</p>
+		    
+		  </div>
+		</div>
+        
+        <h2>More info :</h2>
+        <div class="list card">
+		  <a href="#" class="item item-icon-left">
+		    Category : {{data.category.name}}
+		  </a>
+
+		  <a href="#" class="item item-icon-left">
+		    specification : {{data.specification.name}}
+		  </a>
+
+		  <a href="#" class="item item-icon-left">
+		    color : {{data.color.name}}
+		  </a>
+
+		  <a href="#" class="item item-icon-left">
+		    type : {{data.type.name}}
+		  </a>
+
+		</div>
+		<h2>about the user :</h2>
+		<div class="list card">
+		  <a href="#" class="item item-icon-left">
+		    name : {{data.user.full_name}}
+		  </a>
+
+		  <a href="#" class="item item-icon-left">
+		    email : {{data.user.email}}
+		  </a>
+
+		  <a href="#" class="item item-icon-left">
+		    phone : {{data.user.phone}}
+		  </a>
+
+		</div>
+        
+        
+
+    </ion-content>
+</ion-view>

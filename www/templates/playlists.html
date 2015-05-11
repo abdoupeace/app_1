@@ -1,0 +1,30 @@
+<ion-view view-title="Playlists">
+  <ion-content>
+         <div class="list">
+
+            <a ng-class="{bounceIn : role,bounceOut : !role}"  class="item item-thumbnail-left animated bounceIn" href="#/app/gift/{{item.id}}" ng-repeat="item in data">
+                <img ng-src="http://{{url}}product-{{item.id}}-1.jpg">
+                <h2>{{item.name}}</h2>
+                <p>{{item.price}} DZD</p>
+            </a>
+
+        </div>
+
+        <div class="bar bar-footer">
+
+
+            <div class="row">
+                <button class="button col button-clear" ng-click="prev()">
+                    <i class="icon ion-chevron-left"></i>
+                    prev
+                </button>
+                <div class="col"></div>
+                <button class="button col button-clear" ng-click="next()">
+                    next
+                    <i class="icon ion-chevron-right"></i>
+                </button>
+            </div>
+
+        </div>
+  </ion-content>
+</ion-view>

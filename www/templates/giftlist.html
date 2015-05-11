@@ -1,0 +1,30 @@
+<ion-view view-title="Gift list">
+    <ion-content has-header="true" >
+        <div class="list">
+
+            <a ng-class="{bounceIn : role,bounceOut : !role}"  class="item item-thumbnail-left animated bounceIn" href="#/app/gift/{{item.id}}" ng-repeat="item in data">
+                <img ng-src="{{item.thumbnail}}">
+                <h2>{{item.name}}</h2>
+                <p>{{item.price}} DZD</p>
+            </a>
+
+        </div>
+
+    </ion-content>
+    
+    <ion-footer-bar align-title="left" class="bar-assertive">
+      <div class="buttons">
+        <button class="button col button-clear" ng-click="prev()">
+            <i class="icon ion-chevron-left"></i>
+            prev
+        </button>
+      </div>
+      <h1 class="title">{{current}} of {{total}} </h1>
+      <div class="buttons" >
+        <button class="button col button-clear" ng-click="next()">
+                next
+            <i class="icon ion-chevron-right"></i>
+        </button>
+      </div>
+    </ion-footer-bar>
+</ion-view>

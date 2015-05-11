@@ -1,123 +1,111 @@
-angular.module('sociogram', ['ionic', 'ngCordova', 'openfb', 'sociogram.controllers'])
+// Ionic Starter App
 
-    .run(function ($rootScope, $state, $ionicPlatform ,$window, OpenFB) {
+// angular.module is a global place for creating, registering and retrieving Angular modules
+// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
+// the 2nd parameter is an array of 'requires'
+// 'starter.controllers' is found in controllers.js
+angular.module('starter', ['ionic', 'starter.controllers','openfb'])
 
-        //on prod remove url  ,'http://localhost:8100/oauthcallback.html' 
-        OpenFB.init('915757828489400' );
- 
-        $ionicPlatform.ready(function () {
-            if (window.StatusBar) {
-                StatusBar.styleDefault();
-            }
+.run(function($ionicPlatform,$rootScope, $state, $window, OpenFB) {
 
-        });
+  OpenFB.init('915757828489400','/app/search');
+   
+  $ionicPlatform.ready(function() {
 
-        $rootScope.$on('$stateChangeStart', function(event, toState) {
-            if (toState.name !== "app.login" && toState.name !== "app.logout" && !$window.sessionStorage['fbtoken']) {
-                $state.go('app.login');
-                event.preventDefault();
-            }
-        });
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if (window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if (window.StatusBar) {
+      // org.apache.cordova.statusbar required
+      StatusBar.styleDefault();
+    }
+  });
 
-        $rootScope.$on('OAuthException', function() {
-            $state.go('app.login');
-        });
-        
+  $rootScope.$on('$stateChangeStart', function(event, toState) {
+      if (toState.name !== "app.login" && toState.name !== "app.logout" && !$window.sessionStorage['fbtoken']) {
+          $state.go('app.login');
+          event.preventDefault();
+      }
+  });
 
-            
+  $rootScope.$on('OAuthException', function() {
+      $state.go('app.login');
+  });
 
+})
 
-    })
+.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
 
-    .config(function ($stateProvider, $urlRouterProvider) {
-        $stateProvider
+  .state('app', {
+    url: "/app",
+    abstract: true,
+    templateUrl: "templates/menu.html",
+    controller: 'AppCtrl'
+  })
+  .state('app.login', {
+      url: "/login",
+      views: {
+          'menuContent': {
+              templateUrl: "templates/login.html",
+              controller: "LoginCtrl"
+          }
+      }
+  })
 
-            .state('app', {
-                url: "/app",
-                abstract: true,
-                templateUrl: "templates/menu.html",
-                controller: "AppCtrl"
-            })
+  .state('app.logout', {
+      url: "/logout",
+      views: {
+          'menuContent': {
+              templateUrl: "templates/logout.html",
+              controller: "LogoutCtrl"
+          }
+      }
+  })
+  .state('app.search', {
+    url: "/search",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/search.html",
+        controller: "SearchCtrl"
 
-            .state('app.login', {
-                url: "/login",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/login.html",
-                        controller: "LoginCtrl"
-                    }
-                }
-            })
+      }
+    }
+  })
 
-            .state('app.logout', {
-                url: "/logout",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/logout.html",
-                        controller: "LogoutCtrl"
-                    }
-                }
-            })
+  .state('app.giftlist', {
+      url: "/giftlist/:url",
+      views: {
+          'menuContent': {
+              templateUrl: "templates/giftlist.html",
+              controller: "GiftlistCtrl"
 
-            .state('app.profile', {
-                url: "/profile",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/profile.html",
-                        controller: "ProfileCtrl"
-                    }
-                }
-            })
+          }
+      }
+  })
 
-            .state('app.not', {
-                url: "/not",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/not.html",
-                        controller: "NotCtrl"
-                    }
-                }
-            })
+  .state('app.gift', {
+      url: "/gift/:id",
+      views: {
+          'menuContent': {
+              templateUrl: "templates/gift.html",
+              controller: "GiftCtrl"
 
-            .state('app.friends', {
-                url: "/person/:personId/friends",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/friend-list.html",
-                        controller: "FriendsCtrl"
-                    }
-                }
-            })
-            .state('app.mutualfriends', {
-                url: "/person/:personId/mutualfriends",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/mutual-friend-list.html",
-                        controller: "MutualFriendsCtrl"
-                    }
-                }
-            })
-            .state('app.person', {
-                url: "/person/:personId",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/person.html",
-                        controller: "PersonCtrl"
-                    }
-                }
-            })
-            .state('app.feed', {
-                url: "/person/:personId/feed",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/feed.html",
-                        controller: "FeedCtrl"
-                    }
-                }
-            });
+          }
+      }
+  })
 
-        // fallback route
-        $urlRouterProvider.otherwise('/app/not');
-
-    });
-
+  .state('app.about', {
+    url: "/about",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/about.html"
+      }
+    }
+  })
+;
+  // if none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('/app/search');
+});

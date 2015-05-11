@@ -1,0 +1,29 @@
+<ion-view view-title="Search">
+
+
+      <ion-content has-header="true" padding="true" >
+
+          <div class="list">
+
+              <label class="item item-input item-select" ng-repeat="item in data">
+                  <div class="input-label">
+                      {{item.name}}
+                  </div>
+                  <select id="{{item.name}}" ng-model="selectedItem" ng-change="update(selectedItem,item.name)">
+                      <option ng-repeat="term in item['0']" >{{term}}</option>
+                  </select>
+              </label>
+
+          </div>
+         
+  </ion-content>
+  <ion-footer-bar align-title="left" class="bar-assertive">
+      <div class="buttons col">
+        <button class="button col button-clear" ng-click="get()">
+            <i class="icon ion-ios-search-strong"></i>
+            GET
+        </button>
+      </div>
+      
+    </ion-footer-bar>
+</ion-view>
